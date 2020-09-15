@@ -100,9 +100,9 @@ DATABASES = {
 #     }
 # }
 """
-CREATE DATABASE {{ files.1 }}_db;
-CREATE USER {{ files.1 }}_usr with password '{{a}}{{b}}{{c}}{{d}}{{e}}{{f}}{{g}}{{h}}{{i}}{{j}}{{k}}{{l}}{{m}}{{n}}{{o}}{{p}}';
-GRANT ALL PRIVILEGES ON DATABASE {{ files.1 }}_db to {{ files.1 }}_usr;
+sudo -u postgres psql -c 'CREATE DATABASE {{ files.1 }}_db;'
+sudo -u postgres psql -c 'CREATE USER {{ files.1 }}_usr with password '{{a}}{{b}}{{c}}{{d}}{{e}}{{f}}{{g}}{{h}}{{i}}{{j}}{{k}}{{l}}{{m}}{{n}}{{o}}{{p}}';'
+sudo -u postgres psql -c 'GRANT ALL PRIVILEGES ON DATABASE {{ files.1 }}_db to {{ files.1 }}_usr;'
 """{% endwith %}{% endwith %}
 
 
