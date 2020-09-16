@@ -2,7 +2,7 @@ import hashlib
 from datetime import timedelta, datetime
 from string import digits, ascii_uppercase
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from django.db import models
+from django.db import models, IntegrityError
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 
@@ -110,20 +110,27 @@ class AuthCode(models.Model):
         return '{} {} code'.format(self.user, self.purpose)
 
     def save(self, *args, **kwargs):
-        if self.user.is_admin:
-            self.code = '0' * len(generate_random_code())
-        super().save(*args, **kwargs)
         AuthCode.objects.filter(expires__lte=timezone.now()).delete()
+        try:
+            if self.user.is_admin:
+                self.code = '0' * len(generate_random_code())
+            super().save(*args, **kwargs)
+        except IntegrityError:
+            AuthCode.objects.filter(purpose=self.purpose, user=self.user, code=self.code).delete()
+            return self.save(*args, **kwargs)
 
     def email_user(self):
         if self.purpose == self.RECOVERY:
             subject = 'Password recovery'
             message = 'Some intro: {code}'.format(code=self.code)
+        elif self.purpose == self.ACTIVATION:
+            subject = 'Email activation'
+            message = 'link'
         else:
             raise NotImplementedError
-
         self.user.send_email(subject, message)
 
     class Meta:
+        unique_together = ('user', 'purpose', 'code')
         verbose_name = 'Auth code'
         verbose_name_plural = 'Auth codes'
