@@ -16,7 +16,6 @@ ALLOWED_HOSTS = ['*']
 
 
 # from celery.schedules import crontab
-# from core.celery import app
-# 
-# app.conf.beat_schedule = {
+
+# CELERY_BEAT_SCHEDULE = {
 # }
