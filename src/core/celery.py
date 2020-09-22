@@ -4,7 +4,7 @@ from celery import Celery
 from django.conf import settings
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.base')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.dev')
 
 app = Celery('{{ files.1 }}_celery')
 app.config_from_object('celeryconfig')
