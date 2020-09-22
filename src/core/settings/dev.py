@@ -13,3 +13,10 @@ ALLOWED_HOSTS = ['*']
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_USER = ''
 # EMAIL_HOST_PASSWORD = ''
+
+
+# from celery.schedules import crontab
+# from core.celery import app
+# 
+# app.conf.beat_schedule = {
+# }
