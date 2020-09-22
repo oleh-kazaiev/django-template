@@ -195,9 +195,3 @@ sudo rabbitmqctl stop_app
 sudo rabbitmqctl reset
 sudo rabbitmqctl start_app
 """ {% endwith %}{% endwith %}
-
-# from celery.schedules import crontab
-# from core.celery import app
-# 
-# app.conf.beat_schedule = {
-# }
