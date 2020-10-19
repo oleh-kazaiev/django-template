@@ -10,10 +10,14 @@ from core.helper import send_email
 
 
 class UserManager(BaseUserManager):
+    @classmethod
+    def normalize_email(cls, email):
+        return str(email).lower()
+    
     def create_user(self, email, password, username='', is_active=False):
         user = self.model(
             username=username,
-            email=self.normalize_email(email=email).lower(),
+            email=self.normalize_email(email=email),
             is_active=is_active
         )
         user.set_password(password)
@@ -23,7 +27,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password, username=''):
         user = self.create_user(
             username=username,
-            email=self.normalize_email(email=email).lower(),
+            email=self.normalize_email(email=email),
             password=password,
         )
         user.is_admin = True
@@ -40,9 +44,10 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False, verbose_name='Admin')
 
     registered = models.DateTimeField(auto_now_add=True, verbose_name='Registered')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
     def send_email(self, subj, msg, html_msg=None):
         args, kwargs = (subj, msg, [self.email]), {'html_message': html_msg}
@@ -53,17 +58,11 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def get_full_name(self):
-        return self.email
-
-    def get_short_name(self):
-        return self.email
-
     def has_perm(self, perm, obj=None):
-        return True
+        return self.is_admin
 
     def has_module_perms(self, app_label):
-        return True
+        return self.is_admin
 
     def __str__(self):
         return self.email
@@ -71,10 +70,6 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
-
-    class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
 
 
 def generate_random_code(length=6, allowed_chars=digits + ascii_uppercase):
@@ -105,6 +100,11 @@ class AuthCode(models.Model):
     code = models.CharField(default=generate_random_code, max_length=10, verbose_name='Code')
     security_token = models.CharField(default=generate_security_token, max_length=45, verbose_name='Security token')
     expires = models.DateTimeField(default=generate_expiration_date, verbose_name='Expiration date')
+    
+    class Meta:
+        unique_together = ('user', 'purpose', 'code')
+        verbose_name = 'Auth code'
+        verbose_name_plural = 'Auth codes'
 
     def __str__(self):
         return '{} {} code'.format(self.user, self.purpose)
@@ -129,8 +129,3 @@ class AuthCode(models.Model):
         else:
             raise NotImplementedError
         self.user.send_email(subject, message)
-
-    class Meta:
-        unique_together = ('user', 'purpose', 'code')
-        verbose_name = 'Auth code'
-        verbose_name_plural = 'Auth codes'
