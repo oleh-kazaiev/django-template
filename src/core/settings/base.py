@@ -82,8 +82,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 # ASGI_APPLICATION = 'core.asgi.application'
 
-
 {% with 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'|make_list as chars %}{% with a=chars|random b=chars|random c=chars|random d=chars|random e=chars|random f=chars|random g=chars|random h=chars|random i=chars|random j=chars|random k=chars|random l=chars|random m=chars|random n=chars|random o=chars|random p=chars|random %}# DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': '{{ files.1 }}_db',
