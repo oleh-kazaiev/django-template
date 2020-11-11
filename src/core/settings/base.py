@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # 'django.contrib.sites',
     # 'rest_auth',
     # 'rest_auth.registration',
@@ -172,6 +172,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.filters.SearchFilter',
         # 'rest_framework.filters.OrderingFilter',
     ),
+    'EXCEPTION_HANDLER': 'core.drf_exception_handler_overide.exception_handler_override',
+    'NON_FIELD_ERRORS_KEY': 'error',
 }
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1000000000
