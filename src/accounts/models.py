@@ -1,10 +1,11 @@
 import hashlib
+
 from datetime import timedelta, datetime
-from string import digits, ascii_uppercase
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models, IntegrityError
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from string import digits, ascii_uppercase
 
 from core.helper import send_email
 
@@ -13,7 +14,7 @@ class UserManager(BaseUserManager):
     @classmethod
     def normalize_email(cls, email):
         return str(email).lower()
-    
+
     def create_user(self, email, password, username='', is_active=False):
         user = self.model(
             username=username,
@@ -44,16 +45,15 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False, verbose_name='Admin')
 
     registered = models.DateTimeField(auto_now_add=True, verbose_name='Registered')
-    
+
+    objects = UserManager()
+
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
-    def send_email(self, subj, msg, html_msg=None):
-        args, kwargs = (subj, msg, [self.email]), {'html_message': html_msg}
-        send_email(*args, **kwargs)
-
-    objects = UserManager()
+    def __str__(self):
+        return self.email
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -64,12 +64,12 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return self.is_admin
 
-    def __str__(self):
-        return self.email
-
     @property
     def is_staff(self):
         return self.is_admin
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        send_email(subject, message, from_email, [self.email], **kwargs)
 
 
 def generate_random_code(length=6, allowed_chars=digits + ascii_uppercase):
@@ -100,7 +100,7 @@ class AuthCode(models.Model):
     code = models.CharField(default=generate_random_code, max_length=10, verbose_name='Code')
     security_token = models.CharField(default=generate_security_token, max_length=45, verbose_name='Security token')
     expires = models.DateTimeField(default=generate_expiration_date, verbose_name='Expiration date')
-    
+
     class Meta:
         unique_together = ('user', 'purpose', 'code')
         verbose_name = 'Auth code'

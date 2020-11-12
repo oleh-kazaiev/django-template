@@ -1,11 +1,11 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls.static import static
+from drf_yasg import openapi
 from drf_yasg.generators import OpenAPISchemaGenerator
 from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 from rest_framework import permissions
-from django.conf import settings
 
 from api.urls import urlpatterns
 
@@ -16,7 +16,7 @@ class AddPrefixOpenAPISchemaGenerator(OpenAPISchemaGenerator):
         schema.basePath = '/api'
         return schema
 
-    
+
 schema_view = get_schema_view(
     openapi.Info(
         title="{{ files.0 }} API",

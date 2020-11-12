@@ -20,6 +20,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'drf_yasg',
+    'django_filters',
+    'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
     # 'django.contrib.sites',
     # 'rest_auth',
     # 'rest_auth.registration',
@@ -29,15 +34,8 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.facebook',
     # 'allauth.socialaccount.providers.google',
 
-    'rest_framework',
-    'rest_framework.authtoken',
-    'drf_yasg',
-
-    'django_filters',
-    'corsheaders',
-
+    'accounts',
     'core',
-    'accounts.apps.AccountsConfig',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

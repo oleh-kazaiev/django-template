@@ -11,10 +11,9 @@ class UserCreationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email')
-        
+
     def clean_email(self):
-        data = self.cleaned_data['email']
-        return data.lower()
+        return User.normalize_email(self.cleaned_data['email'])
 
     def clean_password_confirmation(self):
         password = self.cleaned_data.get("password")
@@ -40,10 +39,9 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         models = User
         fields = ('username', 'email', 'password', 'is_admin')
-        
+
     def clean_email(self):
-        data = self.cleaned_data['email']
-        return data.lower()
+        return User.normalize_email(self.cleaned_data['email'])
 
     def clean_password(self):
         return self.initial["password"]
