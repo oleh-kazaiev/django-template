@@ -16,7 +16,12 @@ def exception_handler_override(exc, context):
             headers['WWW-Authenticate'] = exc.auth_header
         if getattr(exc, 'wait', None):
             headers['Retry-After'] = '%d' % exc.wait
-        data = exc.get_full_details()
+        
+        if isinstance(exc.detail, (list, dict)):
+            data = exc.get_full_details()
+        else:
+            data = {'error': exc.get_full_details()}
+
         set_rollback()
         return Response(data, status=exc.status_code, headers=headers)
     return None
