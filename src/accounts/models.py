@@ -128,4 +128,4 @@ class AuthCode(models.Model):
             message = 'link'
         else:
             raise NotImplementedError
-        self.user.send_email(subject, message)
+        self.user.email_user(subject, message)
