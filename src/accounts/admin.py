@@ -42,4 +42,4 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(User, UserAdmin)
 
 admin.site.unregister(Group)
-admin.site.unregister(Token)
+# admin.site.unregister(Token)
