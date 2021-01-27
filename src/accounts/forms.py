@@ -13,7 +13,7 @@ class UserCreationForm(forms.ModelForm):
         fields = ('username', 'email')
 
     def clean_email(self):
-        return User.normalize_email(self.cleaned_data['email'])
+        return User.objects.normalize_email(self.cleaned_data['email'])
 
     def clean_password_confirmation(self):
         password = self.cleaned_data.get("password")
@@ -41,7 +41,7 @@ class UserChangeForm(forms.ModelForm):
         fields = ('username', 'email', 'password', 'is_admin')
 
     def clean_email(self):
-        return User.normalize_email(self.cleaned_data['email'])
+        return User.objects.normalize_email(self.cleaned_data['email'])
 
     def clean_password(self):
         return self.initial["password"]
