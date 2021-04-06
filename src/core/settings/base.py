@@ -1,7 +1,7 @@
-import os
+from pathlib import Path
 
-WEBSITE_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-PROJECT_ROOT = os.path.abspath(os.path.dirname(WEBSITE_ROOT))
+WEBSITE_ROOT = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT = WEBSITE_ROOT.parent
 
 SECRET_KEY = '{{ secret_key }}'
 
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(WEBSITE_ROOT, 'templates')],
+        'DIRS': [WEBSITE_ROOT.joinpath('templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LOG_PATH = os.path.join(PROJECT_ROOT, "logs/")
+LOG_PATH = PROJECT_ROOT.joinpath("logs")
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -151,10 +151,10 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static_root')
+STATIC_ROOT = PROJECT_ROOT.joinpath('static_root')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media_root')
+MEDIA_ROOT = PROJECT_ROOT.joinpath('media_root')
 
 
 REST_FRAMEWORK = {
