@@ -119,7 +119,7 @@ LOGGING = {
         'django_error': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': LOG_PATH + 'django.log',
+            'filename': LOG_PATH.joinpath('django.log'),
         },
         'mail_devs': {
             'class': 'core.handlers.SendEmailToDevelopersHandler',
