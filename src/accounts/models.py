@@ -1,3 +1,4 @@
+import uuid
 import hashlib
 
 from datetime import timedelta, datetime
@@ -38,6 +39,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, verbose_name='Email')
     username = models.CharField(max_length=300, blank=True, verbose_name='Username')
 
